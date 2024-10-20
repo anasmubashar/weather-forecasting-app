@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Weather Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+  <body class="bg-gray-100">
+    <div class="flex h-screen">
+      <!-- Sidebar -->
+      <div class="w-64 bg-white shadow-md">
+        <div class="p-4">
+          <h1 class="text-2xl font-bold text-gray-800">Cuacane</h1>
+        </div>
+        <nav class="mt-6">
+          <a
+            href="index.html"
+            class="flex items-center py-2 px-4 text-gray-700 hover:bg-gray-200"
+          >
+            <svg
+              class="w-5 h-5 mr-2"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+              ></path>
+            </svg>
+            Dashboard
+          </a>
+          <!-- Add more menu items here -->
+          <a
+            href="tables.html"
+            class="flex items-center py-2 px-4 text-gray-700 hover:bg-gray-200"
+          >
+            <svg
+              class="w-5 h-5 mr-2"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"
+              ></path>
+            </svg>
+            Table
+          </a>
+        </nav>
+      </div>
+
+      <!-- Main content -->
+      <div class="flex-1 p-8">
+        <div class="mb-4">
+          <input
+            id="search"
+            type="text"
+            placeholder="Enter city name"
+            class="w-full p-2 border rounded-md"
+          />
+        </div>
+
+        <!-- Weather card -->
+        <div id="weather" class="bg-blue-100 rounded-lg p-6 mb-6">
+          <!-- Weather data will be inserted here -->
+        </div>
+
+        <!-- Charts -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="bg-white rounded-lg p-4 shadow">
+            <h3 class="text-lg font-semibold mb-2">Temperature Forecast</h3>
+            <canvas id="temperatureChart"></canvas>
+          </div>
+          <div class="bg-white rounded-lg p-4 shadow">
+            <h3 class="text-lg font-semibold mb-2">Weather Conditions</h3>
+            <canvas id="weatherConditionsChart"></canvas>
+          </div>
+          <div class="bg-white rounded-lg p-4 shadow">
+            <h3 class="text-lg font-semibold mb-2">Humidity Forecast</h3>
+            <canvas id="humidityChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="weather.js"></script>
+  </body>
+</html>
