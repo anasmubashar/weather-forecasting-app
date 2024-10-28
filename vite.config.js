@@ -4,12 +4,12 @@ export default defineConfig({
   build: {
     rollupOptions: {
       input: {
-        main: "/public/index.html",
-        table: "/public/tables.html",
+        main: "/index.html",
+        table: "/tables.html",
       },
     },
   },
   server: {
-    open: "/public/index.html",
+    open: "/index.html",
   },
 });
