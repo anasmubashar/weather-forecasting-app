@@ -8,7 +8,8 @@
   },
   "name": "assignment2",
   "version": "1.0.0",
-  "main": "table.js",
+  "main": "weather.js",
+  "table": "table.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

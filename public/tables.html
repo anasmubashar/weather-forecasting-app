@@ -71,6 +71,32 @@
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <div class="bg-white rounded-lg shadow-md p-6">
             <h2 class="text-xl font-semibold mb-4">Weekly Forecast</h2>
+            <div class="mb-4">
+              <button
+                id="sortAsc"
+                class="bg-blue-500 text-white py-1 px-3 rounded-md hover:bg-blue-600 mr-2"
+              >
+                Sort Ascending
+              </button>
+              <button
+                id="sortDesc"
+                class="bg-blue-500 text-white py-1 px-3 rounded-md hover:bg-blue-600 mr-2"
+              >
+                Sort Descending
+              </button>
+              <button
+                id="sortHighTemp"
+                class="bg-blue-500 text-white py-1 px-3 rounded-md hover:bg-blue-600 mr-2"
+              >
+                Highest Temp
+              </button>
+              <button
+                id="sortRainy"
+                class="bg-blue-500 text-white py-1 px-3 rounded-md hover:bg-blue-600"
+              >
+                Rainy Days
+              </button>
+            </div>
             <table class="w-full" id="weatherTable">
               <thead>
                 <tr class="bg-gray-200">

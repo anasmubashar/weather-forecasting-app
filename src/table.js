@@ -13,6 +13,12 @@ const chatBox = document.getElementById("chatBox");
 const userInput = document.getElementById("userInput");
 const sendBtn = document.getElementById("sendBtn");
 
+// Sorting buttons
+const sortAscBtn = document.getElementById("sortAsc");
+const sortDescBtn = document.getElementById("sortDesc");
+const sortHighTempBtn = document.getElementById("sortHighTemp");
+const sortRainyBtn = document.getElementById("sortRainy");
+
 // Gemini API setup
 const GeminiApi = "AIzaSyCar8kQJSppSiKCUSaDKOLKW9EV7uYCjMc";
 const genAI = new GoogleGenerativeAI(GeminiApi);
@@ -24,6 +30,7 @@ const prompt =
 let currentPage = 1;
 const rowsPerPage = 5;
 let weatherData = [];
+let currentSortedData = weatherData; // Initialize currentSortedData
 
 let currentCity = "London";
 
@@ -44,8 +51,9 @@ async function fetchWeatherData(city) {
       windSpeed: entry.wind.speed,
     }));
 
+    currentSortedData = weatherData; // Update currentSortedData
     currentCity = city; // Update the current city
-    renderTable(1);
+    renderTable(1, currentSortedData); // Pass currentSortedData to renderTable
     return data;
   } catch (error) {
     console.error("Error fetching data:", error);
@@ -55,24 +63,42 @@ async function fetchWeatherData(city) {
   }
 }
 
+// Sorting functions
+function sortByDate(a, b, ascending = true) {
+  const dateA = new Date(a.dateTime);
+  const dateB = new Date(b.dateTime);
+  return ascending ? dateA - dateB : dateB - dateA;
+}
+
+function sortByTemperature(a, b, ascending = true) {
+  return ascending ? a.temp - b.temp : b.temp - a.temp;
+}
+
+function sortByRainy(a, b) {
+  const rainyConditions = ["Rain", "Drizzle", "Thunderstorm"];
+  const isRainyA = rainyConditions.includes(a.weather);
+  const isRainyB = rainyConditions.includes(b.weather);
+  return isRainyB - isRainyA;
+}
+
 // Render table with pagination
-function renderTable(page) {
+function renderTable(page, data = currentSortedData) {
   tableBody.innerHTML = "";
   const start = (page - 1) * rowsPerPage;
-  const end = Math.min(start + rowsPerPage, weatherData.length);
+  const end = Math.min(start + rowsPerPage, data.length);
 
   for (let i = start; i < end; i++) {
     const row = `
-            <tr>
-                <td class="p-2 border-b">${weatherData[i].dateTime}</td>
-                <td class="p-2 border-b">${weatherData[i].temp}°C</td>
-                <td class="p-2 border-b">${weatherData[i].weather}</td>
-            </tr>
-        `;
+      <tr>
+        <td class="p-2 border-b">${data[i].dateTime}</td>
+        <td class="p-2 border-b">${data[i].temp}°C</td>
+        <td class="p-2 border-b">${data[i].weather}</td>
+      </tr>
+    `;
     tableBody.innerHTML += row;
   }
 
-  const totalPages = Math.ceil(weatherData.length / rowsPerPage);
+  const totalPages = Math.ceil(data.length / rowsPerPage);
   pageInfo.textContent = `Page ${page} of ${totalPages}`;
   prevBtn.disabled = page === 1;
   nextBtn.disabled = page === totalPages;
@@ -81,12 +107,35 @@ function renderTable(page) {
 
 // Event listeners for pagination
 prevBtn.addEventListener("click", () => {
-  if (currentPage > 1) renderTable(currentPage - 1);
+  if (currentPage > 1) renderTable(currentPage - 1, currentSortedData);
 });
 
 nextBtn.addEventListener("click", () => {
-  const totalPages = Math.ceil(weatherData.length / rowsPerPage);
-  if (currentPage < totalPages) renderTable(currentPage + 1);
+  const totalPages = Math.ceil(currentSortedData.length / rowsPerPage);
+  if (currentPage < totalPages) renderTable(currentPage + 1, currentSortedData);
+});
+
+// Event listeners for sorting buttons
+sortAscBtn.addEventListener("click", () => {
+  currentSortedData = [...weatherData].sort((a, b) => sortByDate(a, b, true));
+  renderTable(1, currentSortedData);
+});
+
+sortDescBtn.addEventListener("click", () => {
+  currentSortedData = [...weatherData].sort((a, b) => sortByDate(a, b, false));
+  renderTable(1, currentSortedData);
+});
+
+sortHighTempBtn.addEventListener("click", () => {
+  currentSortedData = [...weatherData].sort((a, b) =>
+    sortByTemperature(a, b, false)
+  );
+  renderTable(1, currentSortedData);
+});
+
+sortRainyBtn.addEventListener("click", () => {
+  currentSortedData = [...weatherData].sort(sortByRainy);
+  renderTable(1, currentSortedData);
 });
 
 // Search event listener
@@ -109,12 +158,12 @@ function addMessage(message, isUser = false) {
   const messageDiv = document.createElement("div");
   messageDiv.className = `mb-2 ${isUser ? "text-right" : "text-left"}`;
   messageDiv.innerHTML = `
-        <span class="inline-block p-2 rounded-lg ${
-          isUser ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-800"
-        }">
-            ${message}
-        </span>
-    `;
+    <span class="inline-block p-2 rounded-lg ${
+      isUser ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-800"
+    }">
+      ${message}
+    </span>
+  `;
   chatBox.appendChild(messageDiv);
   chatBox.scrollTop = chatBox.scrollHeight;
 }
